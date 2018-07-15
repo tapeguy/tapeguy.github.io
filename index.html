@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MPLS</title>
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-ui-1.12.1/jquery-ui.css">
+<script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+$(function() {
+	$(".navlink").button();
+	$(".navlink").click(function(event) {
+		document.location.href = '#' + event.target.id.replace("_link", "");
+	});
+});
+</script>
+
+</head>
+<body>
+<div id="page_wrap">
+  <div id="header">
+Ben Shern <br>
+Professor Zeller <br>
+INF 680 VA - Network Architecture and Communications I <br>
+15 July 2018 <br>
+
+<h1 style="width: 100%; text-align: center; margin-top: 0">MPLS for Reliable WAN Communications</h1>
+<br>
+  </div>
+  <div id="left">
+    <div id="sidebar">
+      <div class="navlink" id="mpls_what_link">What is MPLS?</div>
+      <div class="navlink" id="benefits_link">Benefits of MPLS</div>
+      <div class="navlink" id="mpls_diagram_link">MPLS network diagram</div>
+      <div class="navlink" id="mpls_how_link">How does MPLS work?</div>
+      <div class="navlink" id="mpls_fec_link">What is a FEC?</div>
+      <div class="navlink" id="mpls_label_link">What does an MPLS label look like?</div>
+      <div class="navlink" id="mpls_frr_link">What does Fast Reroute do?</div>
+      <div class="navlink" id="limitations_link">What are the limitations of MPLS?</div>
+      <div class="navlink" id="enterprise_link">Where does MPLS fit in the enterprise?</div>
+      <div class="navlink" id="references_link">References</div>
+    </div>
+  </div>
+
+  <div id="outer">
+    <div id="inner">
+      <h3><a name="mpls_what">What is MPLS?</a></h3>
+
+<p>The Multiprotocol Label Switching (MPLS) protocol is currently the predominant technology that enables wide area networks (WANs) in large organizations and enterprises today.&nbsp; The MPLS protocol sits between OSI Layer 2 (data link layer) and Layer 3 (network layer), so it is sometimes referred to as "layer 2.5."&nbsp; It was designed to extend and replace previous technologies that have similar goals like Frame Relay and Asynchronous Transfer Mode (ATM).&nbsp; AT&amp;T was by far the largest Frame Relay provider with an estimated customer base of $6 billion per year. This number has almost dropped to zero as customers have adopted newer and more cost effective MPLS networks.</p>
+
+<br>
+      <h3><a name="benefits">Benefits of MPLS</a></h3>
+
+<ul>
+  <li>The primary benefit of MPLS is that it is not tied to any underlying layer 2 technology and is multi-protocol (the MP in MPLS).&nbsp; MPLS works with many data links including T1/E1, ATM, Frame Relay, DSL, cable, and 4G/LTE.</li>
+<br>
+  <li>MPLS provides support for traffic-engineering (TE).&nbsp; This gives the ability to manage capacity, priority, and prevent congestion on the network.</li>
+<br>
+  <li>Unlike Frame Relay, MPLS provides quality of service (QoS) management.&nbsp; QoS can be used to give applications that are latency and jitter sensitive higher priority.&nbsp; These applications typically include things like voice-over-IP (VoIP), video-conferencing, multimedia, and desktop virtualization (such as Citrix).&nbsp; These applications are typically more tolerant of packet loss, where-as other applications such as web and database may benefit from service on a slower but more reliable link.</li>
+<br>
+  <li>MPLS provides a feature known as "Fast Reroute" (FRR).&nbsp; This improves network uptime and resiliency. Recovery times of less than 50ms ensure that VoIP calls carry on without interruption.</li>
+<br>
+  <li>MPLS improves scalability.&nbsp; In the past, enterprises typically used Frame Relay in a star (hub and spoke) topology to connect headquarters with branches.</li>
+<br>
+</ul>
+
+<img src="images/star_topology.png">
+
+<p>As this Frame Relay network scaled, additional circuits were added to incorporate a mesh or partial mesh topology. This increases complexity and management exponentially.</p>
+
+<img src="images/mesh_topology.png">
+
+<br>
+      <h3><a name="mpls_diagram">MPLS network diagram</a></h3>
+
+<p>MPLS improves upon the complexity by implementing a routed network; where all the core routers, called Label Switch Routers (LSRs) are owned and managed by the service provider.</p>
+
+<img src="images/routed_network.png">
+
+<br>
+      <h3><a name="mpls_how">How does MPLS work?</a></h3>
+
+<p>In a traditional IP network, interior routers use a shortest path first (SPF) algorithm to determine the path with least cost.&nbsp; Each router makes a forwarding decision using the network header.&nbsp; The process is repeated at each hop along the route until the packet eventually reaches its final destination.</p>
+
+<p>MPLS departs from this.&nbsp; Upon entering the network, packets are given a specific forwarding equivalence class (FEC).</p>
+
+<br>
+      <h3><a name="mpls_fec">What is a FEC?</a></h3>
+<p>The FEC categorizes packets based on similar characteristics such as origination, destination, and QoS traffic class.&nbsp; FECs are used to handle similar packets in the same manner and over the same path.&nbsp; This FEC establishes a pre-determined route through the network, called a Label Switching Path (LSP), also sometimes referred to as an MPLS Tunnel.&nbsp; An MPLS label is prepended to the packet as it enters the network based on the FEC by an Edge Label Switch Router (ELSR).&nbsp; The core LSRs use these labels to transport the packet until it exits at another ELSR.&nbsp; At this point the label is removed and the FEC is re-evaluated.&nbsp; This effectively pushes the "intelligence" of routing to the edge routers and decreases overhead of core routers.</p>
+
+<br>
+      <h3><a name="mpls_label">What does an MPLS label look like?</a></h3>
+
+<p>A label is a four-byte identifier that is put on a particular packet and represents the FEC to which that packet is assigned.&nbsp; These labels are arranged in a stack data structure; so that additional labels can be pushed and popped as needed.&nbsp; Features such as virtual private networks (VPNs) are implemented by pushing additional labels into this stack.&nbsp; The labels are inserted between layer 2 and layer 3 headers.</p>
+
+<br>
+<br>
+<img src="images/mpls_label.png">
+<br>
+<br>
+
+On an IP network, this would look like:
+
+<br>
+<br>
+<img src="images/mpls_ip_label.gif">
+<br>
+<br>
+
+The 32 bits in the label are arranged into fields as follows:<br>
+<b>Label (20 bits)</b>:&nbsp; Label Value (Unstructured) <br>
+<b>Exp/TC (3 bits)</b>:&nbsp; Originally labeled Experimental Use, it was renamed in 2009 to Traffic Class.&nbsp; A field for QoS priority and ECN (Explicit Congestion Notification). <br>
+<b>S (1 bit)</b>:&nbsp; Bottom of Stack indicator <br>
+<b>TTL (8 bits)</b>:&nbsp; Time to Live <br>
+<br>
+
+      <h3><a name="mpls_frr">What does Fast Reroute do?</a></h3>
+<br>
+<p>MPLS networks can be protected from both link and node failures with redundant hardware.&nbsp; Link failures can be avoided by configuring what is called Next-Hop Backups.</p>
+<br>
+<img src="images/link_protection.jpg">
+<br>
+<p>Node failures are avoided by configuring what is called Next-Next-Hop Backups.</p>
+<br>
+<img src="images/node_protection.jpg">
+<br>
+<p>The next best path calculation happens before the failure actually occurs. The backup paths are pre-programmed into the router awaiting activation, which can happen in milliseconds following failure detection.</p>
+
+<br>
+      <h3><a name="limitations">What are the limitations of MPLS?</a></h3>
+
+<ul>
+  <li>MPLS is expensive and difficult for enterprises to provision.  There can be as much as 100 times difference between cost of broadband Internet and MPLS bandwidth!</li>
+<br>
+  <li>MPLS networks may not be available around the globe or may not traverse between continents.</li>
+<br>
+  <li>The local loops between the data center and service provider are still susceptible to cable cuts and outages.</li>
+<br>
+  <li>As cloud computing becomes more prevalent it makes less sense to push data to an MPLS provider and then to the Internet cloud application.&nbsp; Traffic can instead be pushed directly onto the Internet.</li>
+<br>
+</ul>
+
+      <h3><a name="enterprise">Where does MPLS fit in the enterprise?</a></h3>
+
+<p>Because of the high cost of MPLS, many enterprise customers are seeking the right balance between MPLS, software-defined WAN (SD-WAN), cloud applications, and broadband Internet solutions.&nbsp; SD-WAN, a relatively new technology, uses software as a virtual overlay to a company's current WAN connection (which is usually MPLS).&nbsp; SD-WAN can be more easily deployed with a software‐based solution on commercial off‐the‐shelf (COTS) hardware platforms.  When organizations want to add bandwidth, they can put SD-WAN on top of MPLS with broadband Internet access.&nbsp; All of these technologies complement each other and provide the strong, secure, private network that is necessary in most industries.</p>
+
+<br>
+      <h3><a name="references">References</a></h3>
+<br>
+What is Multiprotocol Label Switching (MPLS)? (n.d.). Retrieved July 13, 2018, from <a href="https://www.sd-wan-experts.com/multiprotocol-label-switching-mpls/" target="_blank">https://www.sd-wan-experts.com/multiprotocol-label-switching-mpls/</a><br>
+<br>
+ Cisco. MPLS FAQ For Beginners. (2017, September 26). Retrieved July 14, 2018, from <a href="https://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/4649-mpls-faq-4649.html" target="_blank">https://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/4649-mpls-faq-4649.html</a><br>
+<br>
+ Steenbergen, R. (n.d.). MPLS for Dummies. Retrieved from <a href="https://www.nanog.org/meetings/nanog49/presentations/Sunday/mpls-nanog49.pdf" target="_blank">https://www.nanog.org/meetings/nanog49/presentations/Sunday/mpls-nanog49.pdf</a><br>
+<br>
+ Multiprotocol Label Switching. (2018, July 12). Retrieved from <a href="https://en.wikipedia.org/wiki/Multiprotocol_Label_Switching" target="_blank">https://en.wikipedia.org/wiki/Multiprotocol_Label_Switching</a><br>
+<br>
+Cisco. Catalyst 6500 Release 12.2SX Software Configuration Guide - Multiprotocol Label Switching (MPLS) [Cisco Catalyst 6500 Series Switches]. (2013, November 17). Retrieved July 14, 2018, from <a href="https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/pfc3mpls.html" target="_blank">https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/pfc3mpls.html</a><br>
+<br>
+ Hopkins, H, (2001, February). Frame Relay + MPLS And how they fit together. Retrieved from <a href="http://www.webtorials.com/main/resource/papers/frforum/paper7/fr-mpls.pdf" target="_blank">http://www.webtorials.com/main/resource/papers/frforum/paper7/fr-mpls.pdf</a><br>
+<br>
+ F. (n.d.). MPLS Compared with Frame Relay and Internet VPN. Retrieved July 10, 2018, from <a href="https://www.sd-wan-experts.com/mpls-compared-with-frame-relay-and-internet-vpn/" target="_blank">https://www.sd-wan-experts.com/mpls-compared-with-frame-relay-and-internet-vpn/</a><br>
+<br>
+ Gottlieb, A. (2016, August 12). SD-WAN takes advantage of the 100x MPLS/Internet price gap. Retrieved from <a href="https://www.networkworld.com/article/3107210/lan-wan/sd-wan-takes-advantage-of-the-100x-mpls-internet-price-gap.html" target="_blank">https://www.networkworld.com/article/3107210/lan-wan/sd-wan-takes-advantage-of-the-100x-mpls-internet-price-gap.html</a><br>
+<br>
+ CenturyLink. (n.d.). Choosing the Right MPLS SOLUTION How to Make the Best Choice for Your Business.  Retrieved from <a href="https://www.centurylink.com/asset/business/medium-business/documents/centurylink-howto-mpls-264920-jan2018-vf.pdf" target="_blank">https://www.centurylink.com/asset/business/medium-business/documents/centurylink-howto-mpls-264920-jan2018-vf.pdf</a><br>
+<br>
+
+
+    </div> <!-- inner  -->
+  </div> <!--  outer  -->
+  <div id="footer">
+  </div>
+</div> <!--  page_wrap  -->
+</body>
